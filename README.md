@@ -1,5 +1,7 @@
 # Mark Daniel Muyo | Data Analyst & Computer Engineer
-> **B.S. Computer Engineering Graduate (GWA: 1.43/1.0)** ## 🚀 Featured Projects
+> **B.S. Computer Engineering Graduate (GWA: 1.43/1.0)**
+>
+> ##🚀Featured Projects
 
 ### 🐝 Self-Powered Beehive Condition Monitoring (Thesis)
 * **Tech:** Python, CNN, TensorFlow, Mel Spectrogram Analysis.
