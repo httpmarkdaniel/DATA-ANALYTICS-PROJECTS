@@ -1,12 +1,5 @@
--- ============================================================
 -- E-COMMERCE FUNNEL ANALYSIS - SQL QUERIES (PostgreSQL)
 -- By Mark Daniel Muyo
--- FIXED FOR POSTGRESQL COMPATIBILITY
--- ============================================================
-
--- First, let's create the table and import data
--- Run this FIRST to set up your database:
-
 CREATE TABLE IF NOT EXISTS user_events (
     event_id INTEGER,
     user_id INTEGER,
