@@ -1,5 +1,3 @@
--- E-COMMERCE FUNNEL ANALYSIS - SQL QUERIES (PostgreSQL)
--- By Mark Daniel Muyo
 CREATE TABLE IF NOT EXISTS user_events (
     event_id INTEGER,
     user_id INTEGER,
@@ -10,14 +8,6 @@ CREATE TABLE IF NOT EXISTS user_events (
     traffic_source VARCHAR(50)
 );
 
--- Then import your CSV using:
--- COPY user_events FROM '/path/to/user_events.csv' DELIMITER ',' CSV HEADER;
-
--- ============================================================
--- 1. CONVERSION FUNNEL ANALYSIS
--- ============================================================
-
--- Q1.1: Overall conversion rate at each funnel stage
 WITH funnel_counts AS (
     SELECT 
         COUNT(CASE WHEN event_type = 'page_view' THEN 1 END) as page_views,
@@ -40,7 +30,6 @@ SELECT
     ROUND((100.0 * purchases / NULLIF(page_views, 0))::numeric, 2) as overall_conversion_rate
 FROM funnel_counts;
 
--- Q1.2: Biggest drop-off points
 WITH funnel_steps AS (
     SELECT 
         COUNT(CASE WHEN event_type = 'page_view' THEN 1 END) as step1,
@@ -75,11 +64,6 @@ SELECT
 FROM funnel_steps
 ORDER BY drop_off_rate DESC;
 
--- ============================================================
--- 2. REVENUE ANALYSIS
--- ============================================================
-
--- Q2.1: Total revenue by traffic source
 SELECT 
     traffic_source,
     COUNT(*) as total_purchases,
@@ -91,7 +75,6 @@ WHERE event_type = 'purchase'
 GROUP BY traffic_source
 ORDER BY total_revenue DESC;
 
--- Q2.2: Revenue trend over time (daily)
 SELECT 
     event_date::date as purchase_date,
     COUNT(*) as daily_purchases,
@@ -102,11 +85,6 @@ WHERE event_type = 'purchase'
 GROUP BY event_date::date
 ORDER BY purchase_date;
 
--- ============================================================
--- 3. PRODUCT PERFORMANCE
--- ============================================================
-
--- Q3.1: Products by revenue
 SELECT 
     product_id,
     COUNT(*) as times_purchased,
@@ -118,7 +96,6 @@ WHERE event_type = 'purchase'
 GROUP BY product_id
 ORDER BY total_revenue DESC;
 
--- Q3.2: Product conversion rates
 WITH product_funnel AS (
     SELECT 
         product_id,
@@ -135,7 +112,6 @@ SELECT
 FROM product_funnel
 ORDER BY conversion_rate DESC;
 
--- Q3.3: Cart abandonment by product
 WITH cart_stats AS (
     SELECT 
         product_id,
@@ -154,11 +130,6 @@ FROM cart_stats
 WHERE carts > 0
 ORDER BY abandonment_rate DESC;
 
--- ============================================================
--- 4. USER BEHAVIOR ANALYSIS
--- ============================================================
-
--- Q4.1: User purchase rate
 WITH user_activity AS (
     SELECT 
         COUNT(DISTINCT user_id) as total_users,
@@ -172,7 +143,6 @@ SELECT
     ROUND((100.0 * purchasing_users / NULLIF(total_users, 0))::numeric, 2) as purchase_rate
 FROM user_activity;
 
--- Q4.2: Repeat customer analysis
 WITH user_purchases AS (
     SELECT 
         user_id,
@@ -205,7 +175,6 @@ ORDER BY
         ELSE 3
     END;
 
--- Q4.3: Top 20 customers by revenue
 SELECT 
     user_id,
     COUNT(*) as num_purchases,
@@ -217,11 +186,6 @@ GROUP BY user_id
 ORDER BY total_spent DESC
 LIMIT 20;
 
--- ============================================================
--- 5. ADVANCED ANALYTICS
--- ============================================================
-
--- Q5.1: Cohort analysis by first traffic source
 WITH first_touch AS (
     SELECT DISTINCT ON (user_id)
         user_id,
@@ -249,7 +213,6 @@ SELECT
 FROM cohort_metrics
 ORDER BY revenue_per_user DESC;
 
--- Q5.2: Daily active users and purchases
 SELECT 
     event_date::date as date,
     COUNT(DISTINCT user_id) as daily_active_users,
@@ -259,7 +222,6 @@ FROM user_events
 GROUP BY event_date::date
 ORDER BY date;
 
--- Q5.3: Hour of day analysis
 SELECT 
     EXTRACT(HOUR FROM event_date)::integer as hour_of_day,
     COUNT(*) as total_events,
@@ -269,11 +231,6 @@ FROM user_events
 GROUP BY EXTRACT(HOUR FROM event_date)::integer
 ORDER BY hour_of_day;
 
--- ============================================================
--- 6. BUSINESS RECOMMENDATIONS
--- ============================================================
-
--- Q6.1: Traffic source performance & recommendations
 WITH source_performance AS (
     SELECT 
         traffic_source,
@@ -298,7 +255,6 @@ SELECT
 FROM source_performance
 ORDER BY revenue_per_user DESC;
 
--- Q6.2: Products needing attention
 WITH product_metrics AS (
     SELECT 
         product_id,
@@ -325,11 +281,6 @@ SELECT
 FROM product_metrics
 ORDER BY conversion_rate;
 
--- ============================================================
--- VERIFICATION QUERIES
--- ============================================================
-
--- Check data import
 SELECT 
     'Total Records' as metric,
     COUNT(*) as value
