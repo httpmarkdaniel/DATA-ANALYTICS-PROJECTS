@@ -301,7 +301,3 @@ SELECT
     ROUND(SUM(amount)::numeric, 2)
 FROM user_events
 WHERE event_type = 'purchase';
-
--- ============================================================
--- END OF SQL PROJECT
--- ============================================================
